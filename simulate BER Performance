@@ -1,0 +1,53 @@
+
+# There are several types of wireless communication channels, and two common examples a
+# (AWN) channel and the Rayleigh fading channel.
+#AWGN channel: In this type of channel, the received signal is corrupted by additive w
+# which is a type of random noise that is characterized by its mean and variance.
+# The AWN channel is often used to model wireless communication channels
+# where the signal experiences random noise due to factors such as atmospheric inte
+# electronic noise, and thermal noise.
+# Rayleigh fading channel: In this type of channel, the signal experiences random varia
+# due to multiple signal paths between the transmitter and receiver.
+# This effect is known as multipath fading, and it can result in signal distortion and
+# The Rayleigh fading channel is commonly used to model wireless communication channels
+# in urban or indoor environments where there are many obstructions that cause signal r
+# Other types of wireless communication channels include:
+#Rician fading channel: This is a variation of the Rayleigh fading channel that includ
+# a dominant line-of-sight path in addition to the scattered paths.
+#Nakagami-m fading channel: This is a generalization of the Rayleigh fading channel th
+# a parameter m that determines the severity of the fading.
+# Flat fading channel: In this type of channel, the signal experiences a constant atten
+# over the entire bandwidth of the signal.
+# Frequency selective fading channel: In this type of channel,
+# different frequency components of the signal experience different levels of attenuati
+# resulting in distortion of the signal waveform.
+# The Bit Error Rate (BER) performance over a Rayleigh fading channel
+# with Binary Phase Shift Keying (BPS) transmission can be analyzed using the followin
+# BER = 0.5 * erfc(np.sqrt (10 ** (Eb_NO_dB / 10)))
+# Where erfc is the complementary error function and SR is the Signal-to-Noise Ratio.
+# To simulate the BER performance over a range of SR values from 0 to 60 dB, we can us
+import numpy as np from scipy.special import erfc import matplotlib.pyplot as plt
+# Parameters
+N = int (le6) #number of bits or symbols
+Eb_NO_dB = np.arange (-3, 60) #multiple Eb/NO
+(SNR) values
+# Transmitter
+ip = np.random.rand (N) > 0.5 #generating 0,1 with equal probability
+S = 2*ip - 1 #BPSK modulation 0 -> -1; 1 -› 1
+# Simulation
+nErr = np.zeros (len (Eb_NO_dB))
+for i, Eb_NO in enumerate (Eb_NO_dB) :
+n = np.sqrt(0.5) * (np.random.randn(N) + 1j*np.random.rand(N)) #white gaussian nor
+h = np.sqrt (0.5) * (np.random.rand(N) + 1j*p. random. rand(N)) # Rayleigh fading c
+y = h*s + np. sqrt (10**(-Eb_NO/10))*n #received Signal
+ipHat = (np.real (y/h) › 0). astype(int) #receiver - hard decision decoding
+nErr [i] = np. sum(ip != ipHat)
+# BER calculation
+simBer = nErr / N
+theoryBerAWGN = 0.5*erfc(np.sort (10** (Eb_NO_dB/10)))
+theoryBer = 0.5*(1 - np. sqrt (10** (Eb_NO_dB/10) / (1 + 10**(Eb_NO_dB/10))))
+# Plot
+plt.semilogy (Eb_NO_dB, theoryBerAWGN, 'cd-', linewidth=2) plt.semilogy (Eb_NO _dB, theoryBer, 'bp-', linewidth=2) plt.semilogy (Eb_NO_dB, simBer, 'mx-', linewidth=2) plt.axis ([-3, 35, le-5, 0.5]) plt.grid(True, which="both")
+plt. legend (['AWGN-Theory', 'Rayleigh-Theory', 'Rayleigh-Simulation']) plt.xlabel ('Eb/No, dB') plt.ylabel ('Bit Error Rate')
+pit.title('BER for BPSK modulation in Rayleigh channel')
+pit.show ()
